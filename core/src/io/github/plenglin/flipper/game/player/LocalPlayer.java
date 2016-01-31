@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-
 import io.github.plenglin.flipper.Util;
+import io.github.plenglin.flipper.game.point.Point;
 
 public class LocalPlayer implements PlayerController {
 
@@ -20,7 +20,7 @@ public class LocalPlayer implements PlayerController {
 
     @Override
     public void attachTo(Player player) {
-        player = player;
+        this.player = player;
         body = player.getBody();
         attached = true;
     }
@@ -28,6 +28,11 @@ public class LocalPlayer implements PlayerController {
     @Override
     public void detach() {
         attached = false;
+    }
+
+    @Override
+    public void init() {
+        
     }
 
     @Override
@@ -39,9 +44,14 @@ public class LocalPlayer implements PlayerController {
             return new Vector2(0, 0);
         }
         int mx = Gdx.input.getX(), my = Gdx.input.getY();
-        Vector2 projectedMouseClick = Util.getProjectedClickPos(camera, mx, my);
+        Vector2 projectedMouseClick = Util.getProjectedPos(camera, mx, my);
         Vector2 playerPos = body.getPosition();
         Vector2 offset = projectedMouseClick.sub(playerPos);
-        return Util.toUnitVector(offset);
+        return offset;
+    }
+
+    @Override
+    public void onCapture(Point point) {
+
     }
 }

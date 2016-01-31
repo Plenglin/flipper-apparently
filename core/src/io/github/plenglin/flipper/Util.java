@@ -3,11 +3,8 @@ package io.github.plenglin.flipper;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
+import io.github.plenglin.flipper.game.Constants;
 
 import java.util.Random;
 
@@ -58,12 +55,20 @@ public class Util {
 
         northf = new FixtureDef();
         northf.shape = norths;
+        northf.restitution = Constants.WALL_BOUNCE;
+        northf.friction = 0;
         southf = new FixtureDef();
-        southf.shape = norths;
+        southf.shape = souths;
+        southf.restitution = Constants.WALL_BOUNCE;
+        southf.friction = 0;
         eastf = new FixtureDef();
-        eastf.shape = wests;
+        eastf.shape = easts;
+        eastf.restitution = Constants.WALL_BOUNCE;
+        eastf.friction = 0;
         westf = new FixtureDef();
         westf.shape = wests;
+        westf.restitution = Constants.WALL_BOUNCE;
+        westf.friction = 0;
 
         north = world.createBody(northb);
         south = world.createBody(southb);
@@ -85,19 +90,25 @@ public class Util {
         return (max - min) * random.nextFloat() + min;
     }
 
-    public static Vector2 getProjectedClickPos(OrthographicCamera camera, int x, int y) {
+    public static Vector2 getProjectedPos(OrthographicCamera camera, int x, int y) {
         float scale = camera.viewportHeight / Gdx.graphics.getHeight();
-        Vector2 screenClickPos = new Vector2(x, y); // where the click was on screen
+        Vector2 screenPos = new Vector2(x, y); // where the click was on screen
         Vector2 camCenter = new Vector2(camera.position.x, camera.position.y);
         Vector2 camDimensions = new Vector2(camera.viewportWidth, camera.viewportHeight);
         Vector2 camCorner = camCenter.cpy().sub(camDimensions.cpy().scl(.5f));
-        Vector2 projectedClickPos = screenClickPos.cpy().scl(scale).add(camCorner);
-        return projectedClickPos;
+        Vector2 projectedPos = screenPos.cpy().scl(scale).add(camCorner);
+        return projectedPos;
     }
 
     public static Vector2 toUnitVector(Vector2 vec) {
-        float magnitude = vec.len();
-        return vec.cpy().scl(1 / magnitude);
+        if (vec.len() == 0) {
+            return new Vector2(0, 0);
+        }
+        return vec.cpy().scl(1 / vec.len());
+    }
+
+    public static float getDist(Vector2 a, Vector2 b) {
+        return Math.abs(a.sub(b).len());
     }
 
 }

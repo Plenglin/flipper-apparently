@@ -4,10 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-
+import io.github.plenglin.flipper.game.Constants;
 import io.github.plenglin.flipper.game.arena.Arena;
 import io.github.plenglin.flipper.game.arena.ArenaRenderer;
+import io.github.plenglin.flipper.game.player.AIPlayerController;
 import io.github.plenglin.flipper.game.player.LocalPlayer;
+import io.github.plenglin.flipper.game.player.PlayerController;
 
 /**
  * Displays a game, with arena height aligned to actual height.
@@ -24,13 +26,24 @@ public class GameScreen implements Screen {
         this.camera = new OrthographicCamera();
         this.renderer = new ArenaRenderer();
         this.controller = new LocalPlayer(camera);
+        PlayerController ai = new AIPlayerController();
         arena.getPlayers().get(0).attachController(controller);
+        arena.getPlayers().get(1).attachController(ai);
     }
 
     @Override
     public void show() {
         int width = Gdx.graphics.getWidth(), height = Gdx.graphics.getHeight();
-        camera.setToOrtho(true, 17.6f, 9.9f);
+        float awidth = arena.getWidth(), aheight = arena.getHeight();
+        float windowRatio = ((float) width)/height;
+        float arenaRatio = arena.getWidth()/arena.getHeight();
+        float scaling;
+        if (windowRatio > arenaRatio) {
+            scaling = aheight / height;
+        } else {
+            scaling = awidth / height;
+        }
+        camera.setToOrtho(true, width*scaling/Constants.CAMERA_ZOOM, height*scaling/Constants.CAMERA_ZOOM);
         camera.position.set(0, 0, 0);
         camera.update();
     }

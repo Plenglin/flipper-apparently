@@ -2,24 +2,16 @@ package io.github.plenglin.flipper.game.arena;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.physics.box2d.World;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import io.github.plenglin.flipper.Util;
 import io.github.plenglin.flipper.game.Constants;
 import io.github.plenglin.flipper.game.player.Player;
 import io.github.plenglin.flipper.game.point.NormalPoint;
 import io.github.plenglin.flipper.game.point.Point;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The place where the game takes place in
@@ -49,8 +41,8 @@ public class Arena implements ContactListener {
 
         Util.generateRectangularWalls(world, 0f, 0f, width * 1.1f, height * 1.1f, 0.5f);
 
-        Player p1 = new Player(Color.BLUE);
-        Player p2 = new Player(Color.RED);
+        Player p1 = new Player(this, Color.BLUE);
+        Player p2 = new Player(this, Color.RED);
 
         players.add(p1);
         players.add(p2);
@@ -64,6 +56,7 @@ public class Arena implements ContactListener {
             CircleShape playerShape = new CircleShape();
             playerShape.setRadius(Constants.PLAYER_RADIUS);
             playerFixtureDef.shape = playerShape;
+            playerFixtureDef.restitution = Constants.PLAYER_BOUNCE;
 
             Body body = world.createBody(playerBodyDef);
             body.createFixture(playerFixtureDef);
@@ -114,7 +107,13 @@ public class Arena implements ContactListener {
         for (Player player : players) {
             player.update(delta);
         }
-        world.step(delta, 6, 2);
+
+        Array<Body> bodies = new Array<Body>();
+        world.getBodies(bodies);
+        for (Body body: bodies) {
+            body.applyForceToCenter(body.getLinearVelocity().scl(-Constants.FRICTION), true);
+        }
+        world.step(delta, 8, 3);
     }
 
     public List<Player> getPlayers() {
@@ -137,11 +136,13 @@ public class Arena implements ContactListener {
             point = (Point) a;
             player = (Player) b;
             point.setOwner(player);
+            player.getController().onCapture(point);
 
         } else if (a instanceof Player && b instanceof Point) {
             point = (Point) b;
             player = (Player) a;
             point.setOwner(player);
+            player.getController().onCapture(point);
         }
     }
 
