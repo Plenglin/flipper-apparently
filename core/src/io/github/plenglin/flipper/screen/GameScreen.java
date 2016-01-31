@@ -27,8 +27,9 @@ public class GameScreen implements Screen {
         this.renderer = new ArenaRenderer();
         this.controller = new LocalPlayer(camera);
         PlayerController ai = new AIPlayerController();
-        arena.getPlayers().get(0).attachController(controller);
-        arena.getPlayers().get(1).attachController(ai);
+        PlayerController ai2 = new AIPlayerController();
+        arena.getPlayers().get(0).attachController(ai);
+        arena.getPlayers().get(1).attachController(ai2);
     }
 
     @Override
@@ -43,7 +44,14 @@ public class GameScreen implements Screen {
         } else {
             scaling = awidth / height;
         }
-        camera.setToOrtho(true, width*scaling/Constants.CAMERA_ZOOM, height*scaling/Constants.CAMERA_ZOOM);
+        switch (Gdx.app.getType()) {
+            case Desktop:
+                camera.setToOrtho(true, width * scaling / Constants.CAMERA_ZOOM, height * scaling / Constants.CAMERA_ZOOM);
+                break;
+            case Android:
+                camera.setToOrtho(true, width * scaling / Constants.CAMERA_ZOOM, height * scaling / Constants.CAMERA_ZOOM);
+                break;
+        }
         camera.position.set(0, 0, 0);
         camera.update();
     }
