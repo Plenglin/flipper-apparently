@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+
 import io.github.plenglin.flipper.game.Constants;
 import io.github.plenglin.flipper.game.arena.Arena;
 import io.github.plenglin.flipper.game.arena.ArenaRenderer;
@@ -43,7 +44,14 @@ public class GameScreen implements Screen {
         } else {
             scaling = awidth / height;
         }
-        camera.setToOrtho(true, width*scaling/Constants.CAMERA_ZOOM, height*scaling/Constants.CAMERA_ZOOM);
+        switch (Gdx.app.getType()) {
+            case Desktop:
+                camera.setToOrtho(true, height * scaling / Constants.CAMERA_ZOOM, width * scaling / Constants.CAMERA_ZOOM);
+                break;
+            case Android:
+                camera.setToOrtho(true, width * scaling / Constants.CAMERA_ZOOM, height * scaling / Constants.CAMERA_ZOOM);
+                break;
+        }
         camera.position.set(0, 0, 0);
         camera.update();
     }
