@@ -7,24 +7,25 @@ import com.badlogic.gdx.physics.box2d.Body;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.plenglin.flipper.Constants;
+import io.github.plenglin.flipper.game.Constants;
+import io.github.plenglin.flipper.game.point.Point;
 
 public class Player {
 
-    private List<io.github.plenglin.flipper.game.point.Point> controlledPoints = new ArrayList<io.github.plenglin.flipper.game.point.Point>();
+    private List<Point> controlledPoints = new ArrayList<Point>();
     private Color color;
     private float speed = Constants.PLAYER_SPEED;
     private float radius = Constants.PLAYER_RADIUS;
     private Body body;
-    private io.github.plenglin.flipper.game.player.PlayerController controller;
+    private PlayerController controller;
 
     public Player(Color color) {
-        this.controller = new io.github.plenglin.flipper.game.player.BlankPlayerController();
+        this.controller = new BlankPlayerController();
         this.color = color;
     }
 
     public void update(float delta) {
-        Vector2 mv = controller.getMovement().scl(this.getSpeed()*delta);
+        Vector2 mv = controller.getMovement().scl(this.getSpeed() * delta);
         this.body.applyForceToCenter(mv, true);
     }
 
@@ -40,11 +41,11 @@ public class Player {
         return radius;
     }
 
-    public void addPoint(io.github.plenglin.flipper.game.point.Point point) {
+    public void addPoint(Point point) {
         controlledPoints.add(point);
     }
 
-    public void removePoint(io.github.plenglin.flipper.game.point.Point point) {
+    public void removePoint(Point point) {
         controlledPoints.remove(point);
     }
 
@@ -57,7 +58,7 @@ public class Player {
         body.setUserData(this);
     }
 
-    public void attachController(io.github.plenglin.flipper.game.player.PlayerController controller) {
+    public void attachController(PlayerController controller) {
         if (this.controller != null) {
             this.controller.detach();
         }
@@ -71,7 +72,7 @@ public class Player {
 
     public int getPointTotal() {
         int sum = 0;
-        for (io.github.plenglin.flipper.game.point.Point p: controlledPoints) {
+        for (Point p : controlledPoints) {
             sum += p.getValue();
         }
         return sum;

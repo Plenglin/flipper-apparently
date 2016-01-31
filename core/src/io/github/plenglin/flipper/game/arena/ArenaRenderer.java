@@ -19,7 +19,7 @@ public class ArenaRenderer implements Disposable {
         shape.setProjectionMatrix(matrix);
         shape.begin(ShapeRenderer.ShapeType.Filled);
 
-        for (io.github.plenglin.flipper.game.point.Point point: arena.getPoints()) {
+        for (io.github.plenglin.flipper.game.point.Point point : arena.getPoints()) {
             Body body = point.getBody();
             io.github.plenglin.flipper.game.player.Player owner = point.getOwner();
             Color color = owner == null ? Color.GRAY : owner.getColor();
@@ -27,7 +27,7 @@ public class ArenaRenderer implements Disposable {
             shape.circle(body.getPosition().x, body.getPosition().y, point.getRadius(), 8);
         }
 
-        for (io.github.plenglin.flipper.game.player.Player player: arena.getPlayers()) {
+        for (io.github.plenglin.flipper.game.player.Player player : arena.getPlayers()) {
             Body body = player.getBody();
             Color color = player.getColor();
             shape.setColor(color);

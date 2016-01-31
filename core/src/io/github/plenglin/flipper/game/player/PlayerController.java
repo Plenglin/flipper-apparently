@@ -11,6 +11,7 @@ public interface PlayerController {
 
     /**
      * Get the controller's movements.
+     *
      * @return a vector indicating how to move the player
      */
     Vector2 getMovement();

@@ -32,7 +32,7 @@ public class LocalPlayer implements PlayerController {
 
     @Override
     public Vector2 getMovement() {
-        if (!attached)  {
+        if (!attached) {
             return new Vector2(0, 0);
         }
         if (!(Gdx.input.isTouched() || Gdx.input.isButtonPressed(0))) {

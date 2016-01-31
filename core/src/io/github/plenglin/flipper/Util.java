@@ -17,17 +17,18 @@ public class Util {
 
     /**
      * Create a walled-off area in a world.
-     * @param world the world to operate on
-     * @param x the central x-coord
-     * @param y the central y-coord
-     * @param width the width of the area
-     * @param height the height of the area
+     *
+     * @param world     the world to operate on
+     * @param x         the central x-coord
+     * @param y         the central y-coord
+     * @param width     the width of the area
+     * @param height    the height of the area
      * @param thickness the thickness of the walls
      * @return an array of the walls {north, south, east, west}
      */
     public static void generateRectangularWalls(World world, float x, float y, float width, float height, float thickness) {
 
-        float hwidth = width/2, hheight = height/2;
+        float hwidth = width / 2, hheight = height / 2;
         BodyDef northb, southb, eastb, westb;
         FixtureDef northf, southf, eastf, westf;
         Body north, south, east, west;
@@ -81,11 +82,11 @@ public class Util {
     }
 
     public static float randfloat(float min, float max) {
-        return (max - min)*random.nextFloat() + min;
+        return (max - min) * random.nextFloat() + min;
     }
 
     public static Vector2 getProjectedClickPos(OrthographicCamera camera, int x, int y) {
-        float scale = camera.viewportHeight/ Gdx.graphics.getHeight();
+        float scale = camera.viewportHeight / Gdx.graphics.getHeight();
         Vector2 screenClickPos = new Vector2(x, y); // where the click was on screen
         Vector2 camCenter = new Vector2(camera.position.x, camera.position.y);
         Vector2 camDimensions = new Vector2(camera.viewportWidth, camera.viewportHeight);

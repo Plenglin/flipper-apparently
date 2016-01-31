@@ -7,14 +7,14 @@ import io.github.plenglin.flipper.screen.GameScreen;
 
 public class Flipper extends Game {
 
-	
-	@Override
-	public void create () {
-        setScreen(new GameScreen(new Arena(16, 9, 8)));
-	}
 
-	@Override
-	public void render () {
-		super.render();
+    @Override
+    public void create() {
+        setScreen(new GameScreen(new Arena(16, 9, 8)));
+    }
+
+    @Override
+    public void render() {
+        super.render();
     }
 }

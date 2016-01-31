@@ -1,13 +1,15 @@
 package io.github.plenglin.flipper.game.point;
 
+import io.github.plenglin.flipper.game.player.Player;
+
 public class NormalPoint extends Point {
 
-    public NormalPoint(io.github.plenglin.flipper.game.player.Player owner) {
+    public NormalPoint(Player owner) {
         super(owner);
     }
 
     @Override
-    protected void onFlipped(io.github.plenglin.flipper.game.player.Player prevOwner, io.github.plenglin.flipper.game.player.Player newOwner) {
+    protected void onFlipped(Player prevOwner, Player newOwner) {
 
     }
 
