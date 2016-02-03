@@ -4,8 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import io.github.plenglin.flipper.Util;
+
 import io.github.plenglin.flipper.game.point.Point;
+import io.github.plenglin.flipper.util.Util;
 
 public class LocalPlayer implements PlayerController {
 

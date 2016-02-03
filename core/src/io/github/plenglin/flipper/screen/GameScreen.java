@@ -1,14 +1,21 @@
 package io.github.plenglin.flipper.screen;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import io.github.plenglin.flipper.Flipper;
 import io.github.plenglin.flipper.game.Constants;
 import io.github.plenglin.flipper.game.arena.Arena;
 import io.github.plenglin.flipper.game.arena.ArenaRenderer;
 import io.github.plenglin.flipper.game.player.AIPlayerController;
 import io.github.plenglin.flipper.game.player.LocalPlayer;
+import io.github.plenglin.flipper.game.player.Player;
 import io.github.plenglin.flipper.game.player.PlayerController;
 
 /**
@@ -17,23 +24,40 @@ import io.github.plenglin.flipper.game.player.PlayerController;
 public class GameScreen implements Screen {
 
     Arena arena;
-    OrthographicCamera camera;
+    OrthographicCamera camera, fontCamera;
     ArenaRenderer renderer;
     LocalPlayer controller;
+    Game game;
+    BitmapFont font;
+    SpriteBatch batch;
 
-    public GameScreen(Arena arena) {
+    float timePassed;
+
+    public GameScreen(Game game, Arena arena) {
+
+        this.game = game;
         this.arena = arena;
         this.camera = new OrthographicCamera();
+        this.fontCamera = new OrthographicCamera();
         this.renderer = new ArenaRenderer();
         this.controller = new LocalPlayer(camera);
-        PlayerController ai = new AIPlayerController();
+
+        PlayerController ai = new LocalPlayer(camera);
         PlayerController ai2 = new AIPlayerController();
         arena.getPlayers().get(0).attachController(ai);
         arena.getPlayers().get(1).attachController(ai2);
+        Gdx.input.setInputProcessor(null);
+
+        font = Flipper.font;
+
+        batch = Flipper.batch;
+
     }
 
     @Override
     public void show() {
+        timePassed = 0;
+
         int width = Gdx.graphics.getWidth(), height = Gdx.graphics.getHeight();
         float awidth = arena.getWidth(), aheight = arena.getHeight();
         float windowRatio = ((float) width)/height;
@@ -54,15 +78,38 @@ public class GameScreen implements Screen {
         }
         camera.position.set(0, 0, 0);
         camera.update();
+
+        fontCamera.setToOrtho(true, width, height);
+        fontCamera.update();
+
     }
 
     @Override
     public void render(float delta) {
+
+        if (timePassed >= Constants.GAME_DURATION) {
+            game.setScreen(new ResultScreen(game, arena.getPlayers()));
+            this.dispose();
+        }
+
+        arena.update(delta);
+
+        timePassed += delta;
+
         float gray = .9f;
         Gdx.gl.glClearColor(gray, gray, gray, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         renderer.render(arena, camera.combined);
-        arena.update(delta);
+        batch.setProjectionMatrix(fontCamera.combined);
+
+        batch.begin();
+        font.setColor(Color.BLACK);
+        Player player = arena.getPlayers().get(0);
+        font.draw(batch, String.valueOf(player.getPointTotal()), 15, 15);
+        font.draw(batch, String.valueOf(Constants.GAME_DURATION - timePassed), 15, 50);
+        batch.end();
+
     }
 
     @Override
@@ -87,7 +134,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-
     }
 
 }

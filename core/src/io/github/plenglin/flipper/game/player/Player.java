@@ -3,13 +3,14 @@ package io.github.plenglin.flipper.game.player;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import io.github.plenglin.flipper.Util;
-import io.github.plenglin.flipper.game.Constants;
-import io.github.plenglin.flipper.game.arena.Arena;
-import io.github.plenglin.flipper.game.point.Point;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.github.plenglin.flipper.game.Constants;
+import io.github.plenglin.flipper.game.arena.Arena;
+import io.github.plenglin.flipper.game.point.Point;
+import io.github.plenglin.flipper.util.Util;
 
 public class Player {
 

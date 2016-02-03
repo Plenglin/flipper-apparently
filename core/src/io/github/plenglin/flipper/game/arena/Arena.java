@@ -2,16 +2,25 @@ package io.github.plenglin.flipper.game.arena;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import io.github.plenglin.flipper.Util;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import io.github.plenglin.flipper.game.Constants;
 import io.github.plenglin.flipper.game.player.Player;
 import io.github.plenglin.flipper.game.point.NormalPoint;
 import io.github.plenglin.flipper.game.point.Point;
-
-import java.util.ArrayList;
-import java.util.List;
+import io.github.plenglin.flipper.util.Util;
 
 /**
  * The place where the game takes place in
