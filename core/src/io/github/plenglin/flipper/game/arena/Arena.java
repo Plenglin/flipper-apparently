@@ -33,8 +33,8 @@ public class Arena implements ContactListener {
     private float width, height, hwidth, hheight;
 
     private World world;
-    private List<Team> teams = new ArrayList<Team>();
-    private List<Point> points = new ArrayList<Point>();
+    private List<Team> teams;
+    private List<Point> points;
 
     /**
      * Create a new arena.
@@ -50,6 +50,8 @@ public class Arena implements ContactListener {
         this.hwidth = width / 2;
         this.hheight = height / 2;
         this.world = new World(new Vector2(0f, 0f), true);
+        this.teams = new ArrayList<Team>();
+        this.points = new ArrayList<Point>();
 
         Util.generateRectangularWalls(world, 0f, 0f, width * 1.1f, height * 1.1f, 0.5f);
 
