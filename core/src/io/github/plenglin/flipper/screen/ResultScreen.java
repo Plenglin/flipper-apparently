@@ -10,20 +10,21 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.List;
 
 import io.github.plenglin.flipper.Flipper;
+import io.github.plenglin.flipper.game.Team;
 import io.github.plenglin.flipper.game.player.Player;
 
 public class ResultScreen implements Screen {
 
     BitmapFont font;
     SpriteBatch batch;
-    private List<Player> players;
+    private List<Team> teams;
     private Game game;
     private boolean won;
 
 
-    public ResultScreen(Game game, List<Player> players) {
+    public ResultScreen(Game game, List<Team> teams) {
         this.game = game;
-        this.players = players;
+        this.teams = teams;
         font = Flipper.font;
         batch = Flipper.batch;
     }
@@ -45,9 +46,9 @@ public class ResultScreen implements Screen {
 
         batch.begin();
         int y = 15;
-        for (Player player: players) {
-            font.setColor(player.getColor());
-            font.draw(batch, String.valueOf(player.getPointTotal()), 10, y);
+        for (Team team: teams) {
+            font.setColor(team.getColor());
+            font.draw(batch, String.valueOf(team.getPointTotal()), 10, y);
             y += 30;
         }
 

@@ -44,8 +44,8 @@ public class GameScreen implements Screen {
 
         PlayerController ai = new LocalPlayer(camera);
         PlayerController ai2 = new AIPlayerController();
-        arena.getPlayers().get(0).attachController(ai);
-        arena.getPlayers().get(1).attachController(ai2);
+        arena.getTeams().get(0).getPlayers().get(0).attachController(ai);
+        arena.getTeams().get(1).getPlayers().get(0).attachController(ai2);
         Gdx.input.setInputProcessor(null);
 
         font = Flipper.font;
@@ -88,7 +88,7 @@ public class GameScreen implements Screen {
     public void render(float delta) {
 
         if (timePassed >= Constants.GAME_DURATION) {
-            game.setScreen(new ResultScreen(game, arena.getPlayers()));
+            game.setScreen(new ResultScreen(game, arena.getTeams()));
             this.dispose();
         }
 
@@ -106,7 +106,7 @@ public class GameScreen implements Screen {
         batch.begin();
         font.setColor(Color.BLACK);
         Player player = arena.getPlayers().get(0);
-        font.draw(batch, String.valueOf(player.getPointTotal()), 15, 15);
+        font.draw(batch, String.valueOf(player.getTeam().getPointTotal()), 15, 15);
         font.draw(batch, String.valueOf(Constants.GAME_DURATION - timePassed), 15, 50);
         batch.end();
 

@@ -2,15 +2,16 @@ package io.github.plenglin.flipper.game.point;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import io.github.plenglin.flipper.game.Team;
 import io.github.plenglin.flipper.game.player.Player;
 
 public abstract class Point {
 
     private final double radius;
-    private Player owner;
+    private Team owner;
     private Body body;
 
-    public Point(Player owner) {
+    public Point(Team owner) {
         this.radius = getRadius();
         setOwner(this.owner);
     }
@@ -19,11 +20,11 @@ public abstract class Point {
         return Math.abs(a.sub(b).len());
     }
 
-    public final Player getOwner() {
+    public final Team getOwner() {
         return owner;
     }
 
-    public final void setOwner(Player owner) {
+    public final void setOwner(Team owner) {
         if (this.owner != null) {
             this.owner.removePoint(this);
         }
@@ -33,8 +34,8 @@ public abstract class Point {
         }
     }
 
-    public final void flip(Player newOwner) {
-        Player prevOwner = this.owner;
+    public final void flip(Team newOwner) {
+        Team prevOwner = this.owner;
         setOwner(newOwner);
         this.onFlipped(prevOwner, newOwner);
     }
@@ -52,7 +53,7 @@ public abstract class Point {
         return body.getPosition();
     }
 
-    protected abstract void onFlipped(Player prevOwner, Player newOwner);
+    protected abstract void onFlipped(Team prevOwner, Team newOwner);
 
     public abstract int getValue();
 

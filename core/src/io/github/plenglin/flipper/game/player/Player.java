@@ -8,24 +8,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.plenglin.flipper.game.Constants;
+import io.github.plenglin.flipper.game.Team;
 import io.github.plenglin.flipper.game.arena.Arena;
 import io.github.plenglin.flipper.game.point.Point;
 import io.github.plenglin.flipper.util.Util;
 
 public class Player {
 
-    private List<Point> controlledPoints = new ArrayList<Point>();
-    private Color color;
     private float speed = Constants.PLAYER_SPEED;
     private float radius = Constants.PLAYER_RADIUS;
     private Body body;
     private PlayerController controller;
     private Arena arena;
+    private Team team;
 
-    public Player(Arena arena, Color color) {
+    public Player() {
         this.controller = new BlankPlayerController();
-        this.color = color;
-        this.arena = arena;
     }
 
     public void update(float delta) {
@@ -34,7 +32,7 @@ public class Player {
     }
 
     public Color getColor() {
-        return color;
+        return team.getColor();
     }
 
     public float getSpeed() {
@@ -43,14 +41,6 @@ public class Player {
 
     public float getRadius() {
         return radius;
-    }
-
-    public void addPoint(Point point) {
-        controlledPoints.add(point);
-    }
-
-    public void removePoint(Point point) {
-        controlledPoints.remove(point);
     }
 
     public Body getBody() {
@@ -74,14 +64,6 @@ public class Player {
         return controller;
     }
 
-    public int getPointTotal() {
-        int sum = 0;
-        for (Point p : controlledPoints) {
-            sum += p.getValue();
-        }
-        return sum;
-    }
-
     public Arena getArena() {
         return arena;
     }
@@ -94,7 +76,7 @@ public class Player {
         Point closest = null;
         float closestDist = Float.MAX_VALUE;
         for (Point p: arena.getPoints()) {
-            if (p.getOwner() == this) {
+            if (p.getOwner() == getTeam()) {
                 continue;
             }
             float dist = Util.getDist(getPosition(), p.getPosition());
@@ -104,6 +86,15 @@ public class Player {
             }
         }
         return closest;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+        this.arena = team.getArena();
+    }
+
+    public Team getTeam() {
+        return team;
     }
 
 }

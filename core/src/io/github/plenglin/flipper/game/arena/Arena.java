@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.plenglin.flipper.game.Constants;
+import io.github.plenglin.flipper.game.Team;
+import io.github.plenglin.flipper.game.player.AIPlayerController;
+import io.github.plenglin.flipper.game.player.LocalPlayer;
 import io.github.plenglin.flipper.game.player.Player;
 import io.github.plenglin.flipper.game.point.NormalPoint;
 import io.github.plenglin.flipper.game.point.Point;
@@ -30,7 +33,7 @@ public class Arena implements ContactListener {
     private float width, height, hwidth, hheight;
 
     private World world;
-    private List<Player> players = new ArrayList<Player>();
+    private List<Team> teams = new ArrayList<Team>();
     private List<Point> points = new ArrayList<Point>();
 
     /**
@@ -50,31 +53,40 @@ public class Arena implements ContactListener {
 
         Util.generateRectangularWalls(world, 0f, 0f, width * 1.1f, height * 1.1f, 0.5f);
 
-        Player p1 = new Player(this, Color.BLUE);
-        Player p2 = new Player(this, Color.RED);
+        Player p1 = new Player();
+        Player p2 = new Player();
+        p2.attachController(new AIPlayerController());
 
-        players.add(p1);
-        players.add(p2);
+        Team t1 = new Team(Color.BLUE, this);
+        Team t2 = new Team(Color.RED, this);
 
-        for (Player player : players) {
+        t1.addPlayer(p1);
+        t2.addPlayer(p2);
 
-            BodyDef playerBodyDef = new BodyDef();
-            playerBodyDef.position.set(Util.randfloat(-hwidth, hwidth), Util.randfloat(-hheight, hheight));
-            playerBodyDef.type = BodyDef.BodyType.DynamicBody;
-            FixtureDef playerFixtureDef = new FixtureDef();
-            CircleShape playerShape = new CircleShape();
-            playerShape.setRadius(Constants.PLAYER_RADIUS);
-            playerFixtureDef.shape = playerShape;
-            playerFixtureDef.restitution = Constants.PLAYER_BOUNCE;
+        teams.add(t1);
+        teams.add(t2);
 
-            Body body = world.createBody(playerBodyDef);
-            body.createFixture(playerFixtureDef);
-            player.setBody(body);
-            System.out.println(player.getBody().getPosition());
+        for (Team team : teams) {
+
+            for (Player player : team) {
+                BodyDef playerBodyDef = new BodyDef();
+                playerBodyDef.position.set(Util.randfloat(-hwidth, hwidth), Util.randfloat(-hheight, hheight));
+                playerBodyDef.type = BodyDef.BodyType.DynamicBody;
+                FixtureDef playerFixtureDef = new FixtureDef();
+                CircleShape playerShape = new CircleShape();
+                playerShape.setRadius(Constants.PLAYER_RADIUS);
+                playerFixtureDef.shape = playerShape;
+                playerFixtureDef.restitution = Constants.PLAYER_BOUNCE;
+
+                Body body = world.createBody(playerBodyDef);
+                body.createFixture(playerFixtureDef);
+                player.setBody(body);
+                System.out.println(player.getBody().getPosition());
+            }
 
             for (int i = 0; i < pointCount; i++) {
 
-                Point point = new NormalPoint(player);
+                Point point = new NormalPoint(team);
 
                 points.add(point);
 
@@ -89,7 +101,7 @@ public class Arena implements ContactListener {
 
                 Body pointBody = world.createBody(bodyDef);
                 pointBody.createFixture(fixtureDef);
-                point.setOwner(player);
+                point.setOwner(team);
                 point.setBody(pointBody);
 
             }
@@ -113,7 +125,7 @@ public class Arena implements ContactListener {
     }
 
     public void update(float delta) {
-        for (Player player : players) {
+        for (Player player : getPlayers()) {
             player.update(delta);
         }
 
@@ -126,6 +138,11 @@ public class Arena implements ContactListener {
     }
 
     public List<Player> getPlayers() {
+        List<Player> players = new ArrayList<Player>();
+        for (Team t: teams) {
+            for (Player p: t)
+            players.add(p);
+        }
         return players;
     }
 
@@ -144,13 +161,13 @@ public class Arena implements ContactListener {
         if (a instanceof Point && b instanceof Player) {
             point = (Point) a;
             player = (Player) b;
-            point.setOwner(player);
+            point.setOwner(player.getTeam());
             player.getController().onCapture(point);
 
         } else if (a instanceof Player && b instanceof Point) {
             point = (Point) b;
             player = (Player) a;
-            point.setOwner(player);
+            point.setOwner(player.getTeam());
             player.getController().onCapture(point);
         }
     }
@@ -168,5 +185,9 @@ public class Arena implements ContactListener {
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
 
+    }
+
+    public List<Team> getTeams() {
+        return teams;
     }
 }

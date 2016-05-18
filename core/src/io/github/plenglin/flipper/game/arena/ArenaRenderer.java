@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Disposable;
+import io.github.plenglin.flipper.game.Team;
 import io.github.plenglin.flipper.game.player.Player;
 import io.github.plenglin.flipper.game.point.Point;
 
@@ -23,7 +24,7 @@ public class ArenaRenderer implements Disposable {
 
         for (Point point : arena.getPoints()) {
             Body body = point.getBody();
-            Player owner = point.getOwner();
+            Team owner = point.getOwner();
             Color color = owner == null ? Color.GRAY : owner.getColor();
             shape.setColor(color);
             shape.circle(body.getPosition().x, body.getPosition().y, point.getRadius(), 8);
