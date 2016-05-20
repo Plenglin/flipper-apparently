@@ -5,9 +5,9 @@ public class Constants {
 
     public static final float PLAYER_RADIUS = 0.2f;
 
-    public static final float PLAYER_SPEED = 500;
+    public static final float PLAYER_SPEED = 500f;
 
-    public static final float FRICTION = 0.75f;
+    public static final float FRICTION_COEFF = 0f;
 
     public static final float WALL_BOUNCE = 0.25f;
 

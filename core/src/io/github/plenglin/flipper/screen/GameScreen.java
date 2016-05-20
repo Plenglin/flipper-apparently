@@ -42,10 +42,6 @@ public class GameScreen implements Screen {
         this.renderer = new ArenaRenderer();
         this.controller = new LocalPlayer(camera);
 
-        PlayerController ai = new LocalPlayer(camera);
-        PlayerController ai2 = new AIPlayerController();
-        arena.getTeams().get(0).getPlayers().get(0).attachController(ai);
-        arena.getTeams().get(1).getPlayers().get(0).attachController(ai2);
         Gdx.input.setInputProcessor(null);
 
         font = Flipper.font;
@@ -94,7 +90,7 @@ public class GameScreen implements Screen {
 
         arena.update(delta);
 
-        timePassed += delta;
+        //timePassed += delta;
 
         float gray = .9f;
         Gdx.gl.glClearColor(gray, gray, gray, 1);

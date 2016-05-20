@@ -17,9 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.plenglin.flipper.game.Constants;
+import io.github.plenglin.flipper.game.GameConfiguration;
 import io.github.plenglin.flipper.game.Team;
 import io.github.plenglin.flipper.game.player.AIPlayerController;
-import io.github.plenglin.flipper.game.player.LocalPlayer;
 import io.github.plenglin.flipper.game.player.Player;
 import io.github.plenglin.flipper.game.point.NormalPoint;
 import io.github.plenglin.flipper.game.point.Point;
@@ -36,6 +36,74 @@ public class Arena implements ContactListener {
     private List<Team> teams;
     private List<Point> points;
 
+    public Arena(GameConfiguration cfg) {
+        this.width = cfg.width;
+        this.height = cfg.height;
+        this.hwidth = width / 2;
+        this.hheight = height / 2;
+
+        this.world = new World(new Vector2(0f, 0f), true);
+        this.teams = cfg.teamList;
+        this.points = new ArrayList<Point>();
+
+        Util.generateRectangularWalls(world, 0f, 0f, width * 1.1f, height * 1.1f, 0.5f);
+
+        for (int i = 0; i < cfg.neutralPoints; i++) { // Add points
+            createPoint(new NormalPoint(null), getRandomPosition());
+        }
+
+        for (Team team: teams) {
+            team.setArena(this);
+
+            for (Player player : team) { // Give the players representations in the physics engine
+                BodyDef playerBodyDef = new BodyDef();
+                playerBodyDef.position.set(Util.randfloat(-hwidth, hwidth), Util.randfloat(-hheight, hheight));
+                playerBodyDef.type = BodyDef.BodyType.DynamicBody;
+                FixtureDef playerFixtureDef = new FixtureDef();
+                CircleShape playerShape = new CircleShape();
+                playerShape.setRadius(Constants.PLAYER_RADIUS);
+                playerFixtureDef.shape = playerShape;
+                playerFixtureDef.restitution = Constants.PLAYER_BOUNCE;
+
+                Body body = world.createBody(playerBodyDef);
+                body.createFixture(playerFixtureDef);
+                player.setBody(body);
+                System.out.println(player.getBody().getPosition());
+            }
+
+            for (int i = 0; i < cfg.controlledPointsPerTeam; i++) { // Add points
+
+                createPoint(new NormalPoint(team), getRandomPosition());
+
+            }
+
+        }
+
+        world.setContactListener(this);
+
+    }
+
+    public Vector2 getRandomPosition() {
+        return new Vector2(Util.randfloat(-hwidth, hwidth), Util.randfloat(-hheight, hheight));
+    }
+
+    public void createPoint(Point point, Vector2 pos) {
+        points.add(point);
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.position.set(pos);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        CircleShape shape = new CircleShape();
+        shape.setRadius(point.getRadius());
+        fixtureDef.shape = shape;
+        fixtureDef.isSensor = true;
+
+        Body pointBody = world.createBody(bodyDef);
+        pointBody.createFixture(fixtureDef);
+        point.setBody(pointBody);
+    }
+
     /**
      * Create a new arena.
      *
@@ -49,6 +117,7 @@ public class Arena implements ContactListener {
         this.height = height;
         this.hwidth = width / 2;
         this.hheight = height / 2;
+
         this.world = new World(new Vector2(0f, 0f), true);
         this.teams = new ArrayList<Team>();
         this.points = new ArrayList<Point>();
@@ -59,11 +128,14 @@ public class Arena implements ContactListener {
         Player p2 = new Player();
         p2.attachController(new AIPlayerController());
 
-        Team t1 = new Team(Color.BLUE, this);
-        Team t2 = new Team(Color.RED, this);
+        Team t1 = new Team(Color.BLUE);
+        Team t2 = new Team(Color.RED);
 
         t1.addPlayer(p1);
         t2.addPlayer(p2);
+
+        t1.setArena(this);
+        t2.setArena(this);
 
         teams.add(t1);
         teams.add(t2);
@@ -134,7 +206,7 @@ public class Arena implements ContactListener {
         Array<Body> bodies = new Array<Body>();
         world.getBodies(bodies);
         for (Body body: bodies) {
-            body.applyForceToCenter(body.getLinearVelocity().scl(-Constants.FRICTION), true);
+            body.applyForceToCenter(body.getLinearVelocity().scl(-Constants.FRICTION_COEFF), true);
         }
         world.step(delta, 8, 3);
     }

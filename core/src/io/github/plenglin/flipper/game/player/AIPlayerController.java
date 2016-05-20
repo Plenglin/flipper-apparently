@@ -12,7 +12,6 @@ import io.github.plenglin.flipper.game.point.Point;
 public class AIPlayerController implements PlayerController {
 
     Point currentTarget;
-    Arena arena;
     Body body;
     Player player;
     boolean isAttached = false;
@@ -20,7 +19,6 @@ public class AIPlayerController implements PlayerController {
     @Override
     public void attachTo(Player player) {
         this.player = player;
-        arena = player.getArena();
         body = player.getBody();
         isAttached = true;
     }
@@ -48,5 +46,8 @@ public class AIPlayerController implements PlayerController {
 
     }
 
+    public Arena getArena() {
+        return player.getArena();
+    }
 
 }

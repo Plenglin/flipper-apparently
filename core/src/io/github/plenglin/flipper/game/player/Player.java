@@ -19,11 +19,14 @@ public class Player {
     private float radius = Constants.PLAYER_RADIUS;
     private Body body;
     private PlayerController controller;
-    private Arena arena;
     private Team team;
 
     public Player() {
-        this.controller = new BlankPlayerController();
+        this(new BlankPlayerController());
+    }
+
+    public Player(PlayerController controller) {
+        attachController(controller);
     }
 
     public void update(float delta) {
@@ -65,7 +68,7 @@ public class Player {
     }
 
     public Arena getArena() {
-        return arena;
+        return team.getArena();
     }
 
     public Vector2 getPosition() {
@@ -75,7 +78,7 @@ public class Player {
     public Point getClosestUncontrolledPoint() {
         Point closest = null;
         float closestDist = Float.MAX_VALUE;
-        for (Point p: arena.getPoints()) {
+        for (Point p: getArena().getPoints()) {
             if (p.getOwner() == getTeam()) {
                 continue;
             }
@@ -90,7 +93,6 @@ public class Player {
 
     public void setTeam(Team team) {
         this.team = team;
-        this.arena = team.getArena();
     }
 
     public Team getTeam() {

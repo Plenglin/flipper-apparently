@@ -19,9 +19,8 @@ public class Team implements Iterable<Player> {
     private List<Point> controlledPoints;
     private Arena arena;
 
-    public Team(Color color, Arena arena) {
+    public Team(Color color) {
         this.color = color;
-        this.arena = arena;
         this.players = new ArrayList<Player>();
         this.controlledPoints = new ArrayList<Point>();
     }
@@ -63,4 +62,13 @@ public class Team implements Iterable<Player> {
     public Arena getArena() {
         return arena;
     }
+
+    /**
+     * Sets current arena to given arena.
+     * @param arena the arena to set
+     */
+    public void setArena(Arena arena) {
+        this.arena = arena;
+    }
+
 }
