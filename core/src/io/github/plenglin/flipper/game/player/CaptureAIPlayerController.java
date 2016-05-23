@@ -7,9 +7,9 @@ import io.github.plenglin.flipper.game.arena.Arena;
 import io.github.plenglin.flipper.game.point.Point;
 
 /**
- * A player controlled by artificial intelligence.
+ * A player controlled by artificial "intelligence." (aka goes to the closest unowned point)
  */
-public class AIPlayerController implements PlayerController {
+public class CaptureAIPlayerController implements PlayerController {
 
     Point currentTarget;
     Body body;

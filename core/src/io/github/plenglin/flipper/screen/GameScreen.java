@@ -13,10 +13,8 @@ import io.github.plenglin.flipper.Flipper;
 import io.github.plenglin.flipper.game.Constants;
 import io.github.plenglin.flipper.game.arena.Arena;
 import io.github.plenglin.flipper.game.arena.ArenaRenderer;
-import io.github.plenglin.flipper.game.player.AIPlayerController;
 import io.github.plenglin.flipper.game.player.LocalPlayer;
 import io.github.plenglin.flipper.game.player.Player;
-import io.github.plenglin.flipper.game.player.PlayerController;
 
 /**
  * Displays a game, with arena height aligned to actual height.

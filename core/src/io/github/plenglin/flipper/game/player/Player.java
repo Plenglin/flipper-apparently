@@ -91,6 +91,22 @@ public class Player {
         return closest;
     }
 
+    public Player getClosestEnemy() {
+        Player closest = null;
+        float closestDist = Float.MAX_VALUE;
+        for (Player p: getArena().getPlayers()) {
+            if (p.getTeam() == getTeam()) {
+                continue;
+            }
+            float dist = Util.getDist(getPosition(), p.getPosition());
+            if (dist < closestDist) {
+                closest = p;
+                closestDist = dist;
+            }
+        }
+        return closest;
+    }
+
     public void setTeam(Team team) {
         this.team = team;
     }

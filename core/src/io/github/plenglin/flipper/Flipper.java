@@ -9,10 +9,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import io.github.plenglin.flipper.game.GameConfiguration;
 import io.github.plenglin.flipper.game.Team;
 import io.github.plenglin.flipper.game.arena.Arena;
-import io.github.plenglin.flipper.game.player.AIPlayerController;
+import io.github.plenglin.flipper.game.player.CaptureAIPlayerController;
 import io.github.plenglin.flipper.game.player.Player;
+import io.github.plenglin.flipper.game.player.RamAIPlayerController;
 import io.github.plenglin.flipper.screen.GameScreen;
-import io.github.plenglin.flipper.screen.MainMenu;
 
 import java.util.ArrayList;
 
@@ -33,35 +33,21 @@ public class Flipper extends Game {
         cfg.neutralPoints = 16;
         cfg.controlledPointsPerTeam = 8;
         cfg.width = 16;
-        cfg.height = 9;
+        cfg.height = 8;
         cfg.teamList = new ArrayList<Team>() {{
 
             add(new Team(Color.BLUE) {{
-                addPlayer(new Player(new AIPlayerController()));
-                addPlayer(new Player(new AIPlayerController()));
-                addPlayer(new Player(new AIPlayerController()));
-                addPlayer(new Player(new AIPlayerController()));
+                addPlayer(new Player(new RamAIPlayerController()));
+                addPlayer(new Player(new RamAIPlayerController()));
+                addPlayer(new Player(new RamAIPlayerController()));
+                addPlayer(new Player(new RamAIPlayerController()));
             }});
 
             add(new Team(Color.RED) {{
-                addPlayer(new Player(new AIPlayerController()));
-                addPlayer(new Player(new AIPlayerController()));
-                addPlayer(new Player(new AIPlayerController()));
-                addPlayer(new Player(new AIPlayerController()));
-            }});
-
-            add(new Team(Color.ORANGE) {{
-                addPlayer(new Player(new AIPlayerController()));
-                addPlayer(new Player(new AIPlayerController()));
-                addPlayer(new Player(new AIPlayerController()));
-                addPlayer(new Player(new AIPlayerController()));
-            }});
-
-            add(new Team(Color.YELLOW) {{
-                addPlayer(new Player(new AIPlayerController()));
-                addPlayer(new Player(new AIPlayerController()));
-                addPlayer(new Player(new AIPlayerController()));
-                addPlayer(new Player(new AIPlayerController()));
+                addPlayer(new Player(new RamAIPlayerController()));
+                addPlayer(new Player(new RamAIPlayerController()));
+                addPlayer(new Player(new RamAIPlayerController()));
+                addPlayer(new Player(new RamAIPlayerController()));
             }});
 
         }};

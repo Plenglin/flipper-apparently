@@ -19,7 +19,7 @@ import java.util.List;
 import io.github.plenglin.flipper.game.Constants;
 import io.github.plenglin.flipper.game.GameConfiguration;
 import io.github.plenglin.flipper.game.Team;
-import io.github.plenglin.flipper.game.player.AIPlayerController;
+import io.github.plenglin.flipper.game.player.CaptureAIPlayerController;
 import io.github.plenglin.flipper.game.player.Player;
 import io.github.plenglin.flipper.game.point.NormalPoint;
 import io.github.plenglin.flipper.game.point.Point;
@@ -126,7 +126,7 @@ public class Arena implements ContactListener {
 
         Player p1 = new Player();
         Player p2 = new Player();
-        p2.attachController(new AIPlayerController());
+        p2.attachController(new CaptureAIPlayerController());
 
         Team t1 = new Team(Color.BLUE);
         Team t2 = new Team(Color.RED);
@@ -199,6 +199,7 @@ public class Arena implements ContactListener {
     }
 
     public void update(float delta) {
+
         for (Player player : getPlayers()) {
             player.update(delta);
         }
@@ -209,6 +210,7 @@ public class Arena implements ContactListener {
             body.applyForceToCenter(body.getLinearVelocity().scl(-Constants.FRICTION_COEFF), true);
         }
         world.step(delta, 8, 3);
+
     }
 
     public List<Player> getPlayers() {
